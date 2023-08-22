@@ -1,4 +1,14 @@
-import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	View,
+	TextInput,
+	Alert,
+	Dimensions,
+	useWindowDimensions,
+	KeyboardAvoidingView,
+	ScrollView,
+} from 'react-native';
 import Btn from '../components/Button';
 import { useState } from 'react';
 import Colors from '../constants/colors';
@@ -12,6 +22,8 @@ const StartScreen = ({ pickedNumber }) => {
 	const handleNumberChange = (num) => {
 		setNumber(num);
 	};
+
+	const { width, height } = useWindowDimensions();
 
 	const resetInput = () => {
 		setNumber('');
@@ -29,37 +41,49 @@ const StartScreen = ({ pickedNumber }) => {
 	};
 
 	console.log(number);
+
+	const marginTop = height < 380 ? 30 : 100;
+
 	return (
-		<View style={styles.screenContainer}>
-			<Title>Guess the Number</Title>
-			<Card>
-				<Instructions>Enter a Number</Instructions>
-				<TextInput
-					style={styles.textInput}
-					maxLength={2}
-					keyboardType="number-pad"
-					autoCapitalize="none"
-					value={number}
-					onChangeText={handleNumberChange}
-				/>
-				<View style={styles.buttonOuterContainer}>
-					<View style={styles.btnContainer}>
-						<Btn onPressConfirm={resetInput}>Reset</Btn>
-					</View>
-					<View style={styles.btnContainer}>
-						<Btn onPressConfirm={checkInputHandler}>Confirm</Btn>
-					</View>
+		<ScrollView style={styles.screen}>
+			<KeyboardAvoidingView style={styles.screen} behavior="position">
+				<View style={[styles.screenContainer, { marginTop: marginTop }]}>
+					<Title>Guess the Number</Title>
+					<Card>
+						<Instructions>Enter a Number</Instructions>
+						<TextInput
+							style={styles.textInput}
+							maxLength={2}
+							keyboardType="number-pad"
+							autoCapitalize="none"
+							value={number}
+							onChangeText={handleNumberChange}
+						/>
+						<View style={styles.buttonOuterContainer}>
+							<View style={styles.btnContainer}>
+								<Btn onPressConfirm={resetInput}>Reset</Btn>
+							</View>
+							<View style={styles.btnContainer}>
+								<Btn onPressConfirm={checkInputHandler}>Confirm</Btn>
+							</View>
+						</View>
+					</Card>
 				</View>
-			</Card>
-		</View>
+			</KeyboardAvoidingView>
+		</ScrollView>
 	);
 };
 export default StartScreen;
 
+// const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
+	screen: {
+		flex: 1,
+	},
 	screenContainer: {
 		flex: 1,
-		marginTop: 100,
+		// marginTop: deviceHeight < 400 ? 30 : 100,
 		alignItems: 'center',
 	},
 	// inputContainer: {

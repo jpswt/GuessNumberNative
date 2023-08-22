@@ -1,31 +1,65 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	View,
+	Image,
+	Dimensions,
+	useWindowDimensions,
+	ScrollView,
+} from 'react-native';
 import Title from '../components/Title';
 import Colors from '../constants/colors';
 import Btn from '../components/Button';
 
 const EndScreen = ({ rounds, userNumber, startNewGame }) => {
+	const { width, height } = useWindowDimensions();
+
+	let imageSize = 300;
+
+	if (width < 380) {
+		imageSize = 150;
+	}
+
+	if (height < 400) {
+		imageSize = 80;
+	}
+
+	const imageStyle = {
+		width: imageSize,
+		height: imageSize,
+		borderRadius: imageSize / 2,
+	};
+
 	return (
-		<View style={styles.screen}>
-			<Title>Game Over</Title>
-			<View style={styles.imageContainer}>
-				<Image
-					style={styles.image}
-					source={require('../assets/images/success.png')}
-				/>
+		<ScrollView style={styles.scroll}>
+			<View style={styles.screen}>
+				<Title>Game Over</Title>
+				<View style={[styles.imageContainer, imageStyle]}>
+					<Image
+						style={styles.image}
+						source={require('../assets/images/success.png')}
+					/>
+				</View>
+				<View>
+					<Text style={styles.summaryText}>
+						Your phone needed <Text style={styles.highlight}>{rounds}</Text>{' '}
+						Rounds to find Number:{' '}
+						<Text style={styles.highlight}>{userNumber}</Text>
+					</Text>
+				</View>
+				<Btn onPressConfirm={startNewGame}>New Game</Btn>
 			</View>
-			<View>
-				<Text style={styles.summaryText}>
-					Your phone needed <Text style={styles.highlight}>{rounds}</Text>{' '}
-					Rounds to find Number:{' '}
-					<Text style={styles.highlight}>{userNumber}</Text>
-				</Text>
-			</View>
-			<Btn onPressConfirm={startNewGame}>New Game</Btn>
-		</View>
+		</ScrollView>
 	);
 };
 export default EndScreen;
+
+const deviceWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
+	scroll: {
+		flex: 1,
+	},
 	screen: {
 		flex: 1,
 		padding: 24,
@@ -33,11 +67,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	imageContainer: {
-		width: 300,
-		height: 300,
+		// width: deviceWidth < 380 ? 150 : 300,
+		// height: deviceWidth < 380 ? 150 : 300,
 		borderWidth: 2,
 		borderColor: Colors.primary8,
-		borderRadius: 150,
+		borderRadius: deviceWidth < 380 ? 75 : 150,
 		overflow: 'hidden',
 		margin: 36,
 	},
